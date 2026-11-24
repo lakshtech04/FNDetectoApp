@@ -1,48 +1,42 @@
-<!DOCTYPE html>
-<html >
+<!doctype html>
+<html lang="en">
 <head>
-	<style>
-.button {
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-  background-color:	#0000FF;;
-}
-
-
-</style>
-  <meta charset="UTF-8">
-  <title>Fake News📰 Detection System</title>
-
-<link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7fb">
+  <title>FNDetecto — Fake News Detector</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='design.css') }}">
 </head>
-
 <body>
- <div class="login">
-	<h1 style="color:blue;">Fake News Detector 📰 </h1>
+  <main class="page-shell">
+    <section class="detector-card" aria-labelledby="page-title">
+      <div class="brand-mark" aria-hidden="true">FN</div>
+      <p class="eyebrow">NEWS CHECK</p>
+      <h1 id="page-title">Check a news story</h1>
+      <p class="intro">Paste a headline or article text and FNDetecto will estimate whether it resembles the examples in its training data.</p>
 
-    <form action="{{ url_for('predict')}}" method="POST">
-    	<textarea  name="message" rows="6" cols="50" required="required" style="font-size: 18pt"></textarea>
-		<br> </br>
+      <form action="{{ url_for('predict') }}" method="post">
+        <label for="message">News text</label>
+        <textarea id="message" name="message" rows="8" maxlength="10000" placeholder="Paste the headline or story here…" required>{{ news_text|default('') }}</textarea>
+        <div class="form-meta"><span>For a more useful estimate, include the full story.</span><span>Up to 10,000 characters</span></div>
+        <button type="submit">Analyze story <span aria-hidden="true">→</span></button>
+      </form>
 
-        <button type="submit" class="button">Predict</button>
-<div class="results">
+      {% if error %}
+      <div class="notice error" role="alert">{{ error }}</div>
+      {% endif %}
 
-	{% if prediction == ['FAKE']%}
-	<h2 style="color:red;">Seems Spam⚠️News📰 </h2>
-	{% elif prediction == ['REAL']%}
-				<h2 style="color:green;"><b>Seems Real News📰</b></h2>
-	{% endif %}
+      {% if prediction %}
+      <section class="notice result {{ 'fake' if prediction == 'FAKE' else 'real' }}" aria-live="polite" aria-labelledby="result-title">
+        <p class="result-label">MODEL ESTIMATE</p>
+        <h2 id="result-title">{{ 'Likely unreliable' if prediction == 'FAKE' else 'Likely reliable' }}</h2>
+        <p>{{ 'The model matched this text more closely to fake-news examples.' if prediction == 'FAKE' else 'The model matched this text more closely to real-news examples.' }}</p>
+      </section>
+      {% endif %}
 
-	</div>
-
-    </form>
-
-</div>
+      <p class="disclaimer">This is an automated estimate based on an older training dataset. It cannot verify facts or replace trusted sources. Check important claims independently.</p>
+    </section>
+    <footer>FNDetecto <span aria-hidden="true">·</span> Fake news detection demo</footer>
+  </main>
+</body>
+</html>

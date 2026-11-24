@@ -1,59 +1,29 @@
-# FNDetectoAPP
+# FNDetecto
 
+A small Flask web app that estimates whether an English news story resembles the **FAKE** or **REAL** examples in the included training dataset.
 
-## 
+## Run locally
 
+Requires Python 3.9 or newer.
 
-### Industry: Lifestyle
+```bash
+python -m venv .venv
+# Windows: .venv\\Scripts\\activate
+# macOS/Linux: source .venv/bin/activate
+python -m pip install -r requirements.txt
+python app.py
+```
 
-### Project Title: Fake News Detection WebApp
+Open <http://127.0.0.1:8000>. On first launch, the app trains a TF-IDF + Passive Aggressive pipeline from `news.csv` and saves it as `fake_news_pipeline.joblib`. Training can take a little time. Later launches load the cached pipeline. Set `FNDETECTO_MODEL_PATH` to choose a different cache location.
 
-### Problem Statement/Opportunity:
-Fake news also referred to hoax news occupies large sphere of cyber space today world-wide.Such misinformation may lead in committingoffences,social unrest, financial frauds upon such misrepresentation, political gain, to increase number of readers, gain revenue associated with click, etc. This may also affect the affect the importance of serious news media. The primary objective is to identify the authenticity of the news and categorise it into fake and real news.
+The project also supports the earlier command `python Fake_News_Det.py`. For a production WSGI server, the included `Procfile` starts Gunicorn with one worker.
 
+## Web routes
 
-### Project Description:
-The primary objective is to identify the authenticity of the news and categorise it into fake and real news. 
-In this project, Machine Learning model PassiveAggressiveClassifier is leveraged to distinguish real and fake news and it has achieved an accuracy of 93.13%. 
-Thereafter, fake news detection web app is created using machine learning,python,html,css and flask and this project is deployed using app service in microsoft azure.
+- `/` — responsive detector page
+- `/predict` — analyzes submitted text
+- `/health` — simple health response
 
-### Our project uses the following azure service:
-#### 1.Web Apps
- - Azure Web Apps are Microsoft's offering to cloud to host web applications. 
- - It allows developers to focus on delivering business values rather than consuming time on Sever updates or OS patches.
- - Interestingly, applications built on Java, PHP, Python, or Node. js can also be deployed on web apps.
- - It supports Continuous deployment with Git, Team Foundation Server, GitHub, and DevOps
- - It supports Built-in autoscale and load balancing.
- 
-Our project is trying to solve the problems faced cyber space today that it is becoming difficult to distinguish fake and real news.
-We are solving this problem by developing a web app for detecting fake news and real news and our project functionalities are mapped to the problem statement.
+## Limitations
 
-
-### Project Demostration:
-
-
-This is a simple Fake News Detection Web App built using python and flask and is deployed using microsoft azure.
-
-**For instance consider the given statement-**
-
-***Stern asked Trump if he supported a war with Iraq, and Trump responded, “Yeah, I guess so.”***
-
-![predticting](https://github.com/d-coder111/FNDetectoApp/blob/master/predict1.PNG)
-
-
-FNDetecto App will detect it as ***spam***.
-
-![fake news](https://github.com/d-coder111/FNDetectoApp/blob/master/fake.PNG)
-
-
-**And now consider another statement-**
-
-***The Corker bill makes it less likely sanctions would be lifted, and lifted in a timely way, which gives less encouragement to Iran***
-
-![predict](https://github.com/d-coder111/FNDetectoApp/blob/master/predict2.PNG)
-
-FNDetecto App will detect it as ***real news***.
-
-![real news](https://github.com/d-coder111/FNDetectoApp/blob/master/real.PNG)
-
-
+This is a demo trained on an older dataset. Its output is a model estimate, not fact checking or proof that a claim is true or false. Verify important claims with reliable sources.
